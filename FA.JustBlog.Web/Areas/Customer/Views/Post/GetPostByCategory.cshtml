@@ -1,0 +1,45 @@
+﻿@model List<Post>
+
+@inject FA.JustBlog.Core.Infrastructures.IUnitOfWork _unitOfWork
+@{
+    ViewData["Title"] = "Get post by category";
+    var mostViewPost = _unitOfWork.PostRepository.GetMostViewedPost(5);
+    var latestPost = _unitOfWork.PostRepository.GetLatestPost(5);
+}
+<div class="col-8">
+     <div class="row">
+      <div class="col-lg-10 col-md-12 mx-auto">
+        @foreach(var item in Model)
+        {
+            IList<Tag> listTag=_unitOfWork.TagRepository.GetTagsByPost(item.Id);
+               
+                <div class="post-preview">
+          <a href="/Post/@item.PostedOn.Value.Year/@item.PostedOn.Value.Month.ToString("00")/@item.UrlSlug">
+            <h2 class="post-title">
+              @item.Title
+            </h2>
+              <p class="post-meta">Posted @FA.JustBlog.Common.DayHelper.GetTimeFromCreated(item.PostedOn.Value) with rate @item.Rate by @item.ViewCount view(s)</p>
+            <h3 class="post-subtitle">
+              @item.ShortDescription
+            </h3>
+          </a>
+            <p>Category: <a href="/Customer/Post/GetPostByCategory?categoryName=@item.Category.Name">@item.Category.Name</a></p>
+            
+                    <p>Tag: @foreach(var tag in listTag)
+                        {
+                            <a href="#" style="background-color: black; color: white;padding:5px;">@tag.Name</a>
+                        }
+              
+            </p>
+        </div>
+        <hr>
+        }
+        
+        <!-- Pager -->
+        <div class="clearfix">
+          <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+        </div>
+      </div>
+    </div>
+</div>
+

@@ -1,0 +1,14 @@
+﻿@model List<Post>
+@{
+}
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            <a href="/Post/@item.PostedOn.Value.Year/@item.PostedOn.Value.Month.ToString("00")/@item.UrlSlug">
+                <h5>@item.Title</h5>
+                <span>@item.PostedOn.Value.ToString("MMM") @item.PostedOn.Value.Day, @item.PostedOn.Value.Year</span>
+            </a>
+        </li>
+    }
+</ul>
